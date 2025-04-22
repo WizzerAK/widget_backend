@@ -65,16 +65,17 @@ app.post("/api/schedule-calls", async (req, res) => {
       method: "POST",
       headers: {
         Authorization: `Zoho-oauthtoken ${token}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
+        auth_type: "oauth",
         arguments: {
           leadid: leadIds.join("|||"),
           starttime: start_time,
           callowner: call_owner,
           callsubject: subject,
           callpurpose: purpose,
-          callagenda: agenda,
+          callagenda: agenda
         }
       })
     });
