@@ -68,7 +68,6 @@ app.post("/api/schedule-calls", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        auth_type: "oauth",
         arguments: {
           leadid: leadIds.join("|||"),
           starttime: start_time,
