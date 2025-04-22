@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const fetch = require("node-fetch");
+// ✅ Correct for CommonJS (Node <18 with node-fetch)
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 require("dotenv").config();
 
 const app = express();
