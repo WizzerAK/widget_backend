@@ -52,6 +52,15 @@ app.post("/api/schedule-calls", async (req, res) => {
     const { leadIds, start_time, call_owner, subject, purpose, agenda } = req.body;
     const token = await getAccessToken();
 
+    console.log("📤 Payload going to Zoho:", {
+      leadid: leadIds.join("|||"),
+      starttime: start_time,
+      callowner: call_owner,
+      callsubject: subject,
+      callpurpose: purpose,
+      callagenda: agenda
+    });
+
     const zohoRes = await fetch("https://www.zohoapis.eu/crm/v2/functions/schedule_calls_bulk/actions/execute", {
       method: "POST",
       headers: {
