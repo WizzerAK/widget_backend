@@ -59,7 +59,8 @@ app.post("/api/schedule-calls", async (req, res) => {
       callagenda: agenda
     });
 
-    const zohoRes = await fetch("https://www.zohoapis.eu/crm/v2/functions/schedule_calls_bulk/actions/execute", {
+    const zohoRes = await fetch("https://www.zohoapis.eu/crm/v2/functions/button.schedule_calls_bulk/actions/execute", {
+
       method: "POST",
       headers: {
         Authorization: `Zoho-oauthtoken ${token}`,
