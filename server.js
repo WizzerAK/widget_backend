@@ -1,23 +1,21 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-// ✅ Correct for CommonJS (Node <18 with node-fetch)
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-let accessToken = process.env.ZOHO_ACCESS_TOKEN;
-let tokenCreatedAt = Date.now();
+let accessToken = null;
+let tokenCreatedAt = 0;
 const tokenExpiry = 3600 * 1000; // 1 hour
 
 async function getAccessToken() {
   const now = Date.now();
 
-  if (now - tokenCreatedAt > tokenExpiry - 60000) {
+  if (!accessToken || now - tokenCreatedAt > tokenExpiry - 60000) {
     console.log("🔁 Refreshing access token...");
 
     const params = new URLSearchParams();
@@ -52,7 +50,7 @@ app.post("/api/schedule-calls", async (req, res) => {
     const { leadIds, start_time, call_owner, subject, purpose, agenda } = req.body;
     const token = await getAccessToken();
 
-    console.log("📤 Payload going to Zoho:", {
+    console.log("📤 Sending payload to Zoho:", {
       leadid: leadIds.join("|||"),
       starttime: start_time,
       callowner: call_owner,
@@ -88,7 +86,7 @@ app.post("/api/schedule-calls", async (req, res) => {
     }
 
   } catch (err) {
-    console.error(err);
+    console.error("❌ Server error", err);
     res.status(500).json({ message: "❌ Internal Server Error", error: err.toString() });
   }
 });
